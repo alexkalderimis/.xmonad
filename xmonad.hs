@@ -2,6 +2,7 @@ import XMonad
 import XMonad.Util.EZConfig
 import XMonad.Operations
 import XMonad.Util.Dzen
+import XMonad.Hooks.DynamicLog (dynamicLog, dzen)
 import XMonad.Layout.ResizableTile
 import System.IO
 import XMonad.Actions.Volume
@@ -16,6 +17,7 @@ centred = onCurr (center 150 66)
     >=> addArgs ["-fg", "#80c0ff"]
     >=> addArgs ["-bg", "#000040"]
 
+-- rebind Mod to the windows key
 modm = mod4Mask
 
 myLayout = ResizableTall 1 (4/100) (3/5) [] ||| Full 
@@ -32,5 +34,6 @@ myKeys = [
     ]
 
 main = do
-    -- rebind Mod to the windows key
-    xmonad $ defaultConfig { layoutHook = myLayout, modMask = mod4Mask } `additionalKeys` myKeys
+    xmonad =<< (XMonad.Hooks.DynamicLog.dzen $ defaultConfig {
+            layoutHook = myLayout, modMask = mod4Mask, logHook = dynamicLog
+        } `additionalKeys` myKeys)
